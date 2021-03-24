@@ -1,8 +1,8 @@
 name: country_picker_ar
 description: A new Flutter package project.
 version: 0.0.1
-author:
-homepage: https://github.com/
+author: Abdallah El-Rashedy
+homepage: https://github.com/AbdallahR99/country_picker_ar
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
