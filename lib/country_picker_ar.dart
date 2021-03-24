@@ -34,10 +34,12 @@ class _CountryPickerState extends State<CountryPicker> {
   void initState() {
     elements = countryPickerFromMap(getCountriesList());
     if (widget.initialSelection != null) {
-      selectedItem = elements
+      final _item = elements
           .firstWhere((element) => element.code == widget.initialSelection);
+      _selectItem(_item);
     } else {
-      selectedItem = elements.elementAt(0);
+      // selectedItem = elements.elementAt(0);
+      _selectItem(elements.elementAt(0));
     }
     super.initState();
   }
@@ -72,12 +74,16 @@ class _CountryPickerState extends State<CountryPicker> {
       ),
     ).then((e) {
       if (e != null) {
-        setState(() {
-          selectedItem = e;
-          widget.onSelect!(e);
-        });
+        _selectItem(e);
         // _publishSelection(e);
       }
+    });
+  }
+
+  void _selectItem(CountryInfo e) {
+    setState(() {
+      selectedItem = e;
+      widget.onSelect!(e);
     });
   }
 }
