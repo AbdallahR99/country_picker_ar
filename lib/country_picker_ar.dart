@@ -1,10 +1,21 @@
 library country_picker_ar;
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'selection_dialog.dart';
 import 'model/country_picker.dart';
 import 'countries_list.dart';
+
+extension IterableExtension<T> on Iterable<T> {
+  T? firstWhereOrNull(bool Function(T element) test) {
+    for (final element in this) {
+      if (test(element)) return element;
+    }
+    return null;
+  }
+}
 
 typedef void OnSelectFun(CountryInfo param);
 
@@ -34,9 +45,24 @@ class _CountryPickerState extends State<CountryPicker> {
   void initState() {
     elements = countryPickerFromMap(getCountriesList());
     if (widget.initialSelection != null) {
-      final _item = elements
-          .firstWhere((element) => element.code == widget.initialSelection);
-      _selectItem(_item);
+      try {
+        final _item = elements.firstWhereOrNull(
+            (element) => element.code == widget.initialSelection);
+        if (_item != null) {
+          _selectItem(_item);
+        } else {
+          final _item = elements.firstWhereOrNull(
+              (element) => element.dialCode == widget.initialSelection);
+          if (_item != null) {
+            _selectItem(_item);
+          } else {
+            _selectItem(elements.elementAt(0));
+          }
+        }
+      } catch (e) {
+        log(e.toString());
+        _selectItem(elements.elementAt(0));
+      }
     } else {
       // selectedItem = elements.elementAt(0);
       _selectItem(elements.elementAt(0));
